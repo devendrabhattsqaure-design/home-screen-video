@@ -1,0 +1,121 @@
+import Link from "next/link"
+import { Flame, MapPin, Phone, Mail } from "lucide-react"
+
+const quickLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About Us" },
+  { href: "/products", label: "Products" },
+  { href: "/contact", label: "Contact" },
+]
+
+const categories = [
+  { href: "/products?category=incense", label: "Incense & Agarbatti" },
+  { href: "/products?category=idols", label: "Idols & Murtis" },
+  { href: "/products?category=diyas", label: "Diyas & Lamps" },
+  { href: "/products?category=pooja-kits", label: "Pooja Kits" },
+]
+
+export default function Footer() {
+  return (
+    <footer className="bg-secondary text-secondary-foreground">
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+          {/* Brand */}
+          <div className="lg:col-span-1">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
+                <Flame className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <span className="font-serif text-xl font-bold text-[var(--color-sandal)]">
+                Sacred Samagri
+              </span>
+            </Link>
+            <p className="mt-4 text-sm leading-relaxed text-secondary-foreground/80">
+              Bringing authentic and premium pooja samagri to devotees across India.
+              Your trusted companion for all spiritual needs.
+            </p>
+          </div>
+
+          {/* Quick links */}
+          <div>
+            <h3 className="font-serif text-lg font-semibold text-[var(--color-sandal)]">
+              Quick Links
+            </h3>
+            <ul className="mt-4 flex flex-col gap-3">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-secondary-foreground/80 transition-colors hover:text-primary"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Categories */}
+          <div>
+            <h3 className="font-serif text-lg font-semibold text-[var(--color-sandal)]">
+              Categories
+            </h3>
+            <ul className="mt-4 flex flex-col gap-3">
+              {categories.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-secondary-foreground/80 transition-colors hover:text-primary"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact info */}
+          <div>
+            <h3 className="font-serif text-lg font-semibold text-[var(--color-sandal)]">
+              Contact Us
+            </h3>
+            <ul className="mt-4 flex flex-col gap-4">
+              <li className="flex items-start gap-3">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                <span className="text-sm text-secondary-foreground/80">
+                  123 Temple Road, Varanasi,
+                  <br />
+                  Uttar Pradesh, India - 221001
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone className="h-4 w-4 shrink-0 text-primary" />
+                <span className="text-sm text-secondary-foreground/80">
+                  +91 98765 43210
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="h-4 w-4 shrink-0 text-primary" />
+                <span className="text-sm text-secondary-foreground/80">
+                  info@sacredsamagri.com
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="mt-12 border-t border-secondary-foreground/20 pt-8">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <p className="text-sm text-secondary-foreground/60">
+              &copy; {new Date().getFullYear()} Sacred Samagri. All rights reserved.
+            </p>
+            <p className="text-sm text-secondary-foreground/60">
+              Serving devotees with faith and devotion
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
