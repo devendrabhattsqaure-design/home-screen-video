@@ -74,12 +74,12 @@ export default function HomePage() {
           >
             Explore Products
           </Link>
-          <Link
+          {/* <Link
             href="/contact"
-            className="rounded-xl border-2 border-[var(--color-sandal)] px-8 py-3.5 font-semibold text-[var(--color-sandal)] transition-all hover:bg-[var(--color-sandal)]/10"
+            className="rounded-xl mt-2 border-2 border-[var(--color-sandal)] px-8 py-3.5 font-semibold text-[var(--color-sandal)] transition-all hover:bg-[var(--color-sandal)]/10"
           >
             Visit Our Store
-          </Link>
+          </Link> */}
         </div>
 
         {/* Floating diyas */}
