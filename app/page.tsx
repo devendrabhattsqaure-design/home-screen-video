@@ -70,16 +70,16 @@ export default function HomePage() {
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
             href="/products"
-            className="rounded-xl mt-4 border-2 border-[var(--color-sandal)] bg-primary px-8 py-3.5 font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
+            className="rounded-xl border-2 border-[var(--color-sandal)] bg-primary px-8 py-3.5 font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
           >
             Explore Products
           </Link>
-          {/* <Link
+          <Link
             href="/contact"
-            className="rounded-xl mt-2 border-2 border-[var(--color-sandal)] px-8 py-3.5 font-semibold text-[var(--color-sandal)] transition-all hover:bg-[var(--color-sandal)]/10"
+            className="rounded-xl border-2 border-[var(--color-sandal)] px-8 py-3.5 font-semibold text-[var(--color-sandal)] transition-all hover:bg-[var(--color-sandal)]/10"
           >
             Visit Our Store
-          </Link> */}
+          </Link>
         </div>
 
         {/* Floating diyas */}
