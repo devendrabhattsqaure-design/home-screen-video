@@ -8,6 +8,7 @@ const quickLinks = [
   { href: "/contact", label: "Contact" },
 ]
 
+
 const categories = [
   { href: "/products?category=incense", label: "Incense & Agarbatti" },
   { href: "/products?category=idols", label: "Idols & Murtis" },
@@ -83,15 +84,15 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 <span className="text-sm text-secondary-foreground/80">
-                  123 Temple Road, Varanasi,
+                  Vikas Khand -5 , Gomti Nagar,
                   <br />
-                  Uttar Pradesh, India - 221001
+                  Lucknow, India - 226010
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 shrink-0 text-primary" />
                 <span className="text-sm text-secondary-foreground/80">
-                  +91 98765 43210
+                  +91 8840403939
                 </span>
               </li>
               <li className="flex items-center gap-3">

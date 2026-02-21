@@ -14,12 +14,12 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Store Address",
-    lines: ["123 Temple Road, Vishwanath Gali", "Varanasi, Uttar Pradesh", "India - 221001"],
+    lines: ["Vikas Khand -5 , Gomti Nagar", "Varanasi, Uttar Pradesh", "India - 221001"],
   },
   {
     icon: Phone,
     title: "Phone",
-    lines: ["+91 98765 43210", "+91 91234 56789"],
+   lines: ["+91 8840403939", "+91 9125233285"],
   },
   {
     icon: Mail,

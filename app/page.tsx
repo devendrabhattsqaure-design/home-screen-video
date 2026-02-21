@@ -64,7 +64,7 @@ export default function HomePage() {
         title="Sacred Essentials for Divine Rituals"
         subtitle="Authentic Pooja Samagri for Your Spiritual Journey"
         size="large"
-        videoSrc="/images/video2.mp4"
+        videoSrc="/images/video.mp4"
         videoType="mp4"
       >
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
