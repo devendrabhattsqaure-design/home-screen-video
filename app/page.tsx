@@ -37,20 +37,20 @@ const features = [
 
 const testimonials = [
   {
-    name: "Priya Sharma",
-    location: "Delhi",
+    name: "Devndra Yadav",
+    location: "Lucknow",
     text: "The quality of the pooja samagri is exceptional. Every item feels authentic and divine. My daily puja has become so much more meaningful.",
     rating: 5,
   },
   {
     name: "Rajesh Patel",
-    location: "Mumbai",
+    location: "Viram Khand-3",
     text: "Best incense sticks I have ever used. The fragrance is pure and long-lasting. Truly a premium spiritual experience.",
     rating: 5,
   },
   {
     name: "Meena Devi",
-    location: "Varanasi",
+    location: "Vipul Khand-1",
     text: "The brass idols are beautifully crafted with incredible detail. Sacred Samagri truly understands devotion and craftsmanship.",
     rating: 5,
   },
