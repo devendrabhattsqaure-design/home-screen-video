@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ShoppingBag, ArrowRight } from "lucide-react"
 import SparklerEffect from "./SparklerEffect"
+import { useCart } from "@/context/CartContext"
 
 export interface Product {
   id: string
@@ -94,6 +95,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 })
   const [isNavigating, setIsNavigating] = useState(false)
   const router = useRouter()
+  const { addItem, openCart } = useCart()
 
   const handleViewDetails = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -116,7 +118,18 @@ export default function ProductCard({ product }: ProductCardProps) {
       router.push(`/products/${product.id}`)
     }, 1000)
   }
-
+const handleQuickAdd = (e: React.MouseEvent) => {
+  e.preventDefault()
+  e.stopPropagation()
+  addItem({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    image: product.image,
+    category: product.category,
+  })
+  openCart() // Open cart drawer to show the item was added
+}
   return (
     <>
       <SparklerEffect isActive={showSparkler} x={clickPosition.x} y={clickPosition.y} />
@@ -169,11 +182,15 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
 
             {/* Quick-shop floating button */}
-            <div className="absolute bottom-3 right-3 translate-y-4 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform duration-300 hover:scale-110">
-                <ShoppingBag className="h-4 w-4" />
-              </span>
-            </div>
+           <div className="absolute bottom-3 right-3 translate-y-4 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">
+  <button
+    onClick={handleQuickAdd}
+    className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform duration-300 hover:scale-110"
+    aria-label="Add to cart"
+  >
+    <ShoppingBag className="h-4 w-4" />
+  </button>
+</div>
 
             {/* Price tag on image */}
             <div className="absolute bottom-3 left-3 translate-y-4 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">

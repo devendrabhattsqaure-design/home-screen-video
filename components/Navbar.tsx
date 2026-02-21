@@ -3,7 +3,8 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
-import { Menu, X, Flame } from "lucide-react"
+import { Menu, X, Flame, ShoppingCart } from "lucide-react"
+import { useCart } from "@/context/CartContext"
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -15,6 +16,7 @@ const navLinks = [
 export default function Navbar() {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { itemCount, openCart } = useCart()
 
   return (
     <header className="sticky top-0 z-50 bg-[var(--color-cream)]/95 backdrop-blur-md border-b border-border">
@@ -57,8 +59,22 @@ export default function Navbar() {
           })}
         </ul>
 
-        {/* CTA + Mobile toggle */}
+        {/* Cart + CTA + Mobile toggle */}
         <div className="flex items-center gap-4">
+          {/* Cart Icon */}
+          <button
+            onClick={openCart}
+            className="relative flex h-10 w-10 items-center justify-center rounded-xl text-foreground hover:bg-primary/10 transition-colors"
+            aria-label="Open cart"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            {itemCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground animate-in zoom-in">
+                {itemCount}
+              </span>
+            )}
+          </button>
+
           <Link
             href="/products"
             className="hidden rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-secondary hover:shadow-md md:inline-block"
