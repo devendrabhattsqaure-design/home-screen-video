@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { ShoppingBag, ArrowRight } from "lucide-react"
 import SparklerEffect from "./SparklerEffect"
 
@@ -90,112 +91,156 @@ function LotusIcon({ className }: { className?: string }) {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const [showSparkler, setShowSparkler] = useState(false)
+  const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 })
+  const [isNavigating, setIsNavigating] = useState(false)
+  const router = useRouter()
 
-  const handleSparkle = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleViewDetails = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    // Get click position for sparkler effect
+    const rect = e.currentTarget.getBoundingClientRect()
+    setClickPosition({
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    })
+    
+    // Trigger sparkler
     setShowSparkler(true)
-    setTimeout(() => setShowSparkler(false), 1000)
+    setIsNavigating(true)
+    
+    // Navigate after sparkler effect
+    setTimeout(() => {
+      setShowSparkler(false)
+      router.push(`/products/${product.id}`)
+    }, 1000)
   }
 
   return (
     <>
-      <SparklerEffect isActive={showSparkler} />
-      <Link
-        href={`/products/${product.id}`}
-        className="group relative flex flex-col overflow-hidden rounded-2xl bg-card product-card-lotus transition-all duration-500 hover:-translate-y-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      <SparklerEffect isActive={showSparkler} x={clickPosition.x} y={clickPosition.y} />
+      <div
+        className={`group relative flex flex-col overflow-hidden rounded-2xl bg-card product-card-lotus transition-all duration-500 hover:-translate-y-3 ${
+          isNavigating ? 'pointer-events-none opacity-70' : ''
+        }`}
       >
-      {/* Top lotus accent bar */}
-      <div className="absolute left-0 right-0 top-0 z-20 flex h-1 items-center" aria-hidden="true">
-        <div className="h-full flex-1 bg-[var(--color-deep-maroon)] transition-colors duration-500 group-hover:bg-[var(--color-saffron)]" />
-        <div className="relative -mt-1">
-          <LotusIcon className="h-5 w-5 text-[var(--color-deep-maroon)] transition-all duration-500 group-hover:text-[var(--color-saffron)] group-hover:scale-125" />
+        {/* Wrap only the image in Link for the main navigation */}
+        <Link
+          href={`/products/${product.id}`}
+          className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          onClick={(e) => {
+            if (isNavigating) {
+              e.preventDefault()
+            }
+          }}
+        >
+          {/* Top lotus accent bar */}
+          <div className="absolute left-0 right-0 top-0 z-20 flex h-1 items-center" aria-hidden="true">
+            <div className="h-full flex-1 bg-[var(--color-deep-maroon)] transition-colors duration-500 group-hover:bg-[var(--color-saffron)]" />
+            <div className="relative -mt-1">
+              <LotusIcon className="h-5 w-5 text-[var(--color-deep-maroon)] transition-all duration-500 group-hover:text-[var(--color-saffron)] group-hover:scale-125" />
+            </div>
+            <div className="h-full flex-1 bg-[var(--color-deep-maroon)] transition-colors duration-500 group-hover:bg-[var(--color-saffron)]" />
+          </div>
+
+          {/* Image area with rounded inner mask */}
+          <div className="relative m-3 mt-4 aspect-square overflow-hidden rounded-xl">
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-cover transition-all duration-700 group-hover:scale-110"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+
+            {/* Overlay */}
+            <div
+              className="absolute inset-0 bg-[var(--color-dark-brown)]/0 transition-all duration-500 group-hover:bg-[var(--color-dark-brown)]/30"
+              aria-hidden="true"
+            />
+
+            {/* Category badge with lotus */}
+            <div className="absolute left-2.5 top-2.5 flex items-center gap-1 rounded-full bg-[var(--color-dark-brown)]/80 px-3 py-1 backdrop-blur-sm">
+              <LotusIcon className="h-3 w-3 text-[var(--color-saffron)]" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-sandal)]">
+                {categoryLabels[product.category] || product.category}
+              </span>
+            </div>
+
+            {/* Quick-shop floating button */}
+            <div className="absolute bottom-3 right-3 translate-y-4 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform duration-300 hover:scale-110">
+                <ShoppingBag className="h-4 w-4" />
+              </span>
+            </div>
+
+            {/* Price tag on image */}
+            <div className="absolute bottom-3 left-3 translate-y-4 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">
+              <span className="rounded-lg bg-card/90 px-3 py-1.5 text-lg font-bold text-secondary shadow-lg backdrop-blur-sm">
+                {"₹"}{product.price.toLocaleString("en-IN")}
+              </span>
+            </div>
+          </div>
+        </Link>
+
+        {/* Lotus divider between image and content */}
+        <div className="-mt-2 px-3">
+          <LotusDivider />
         </div>
-        <div className="h-full flex-1 bg-[var(--color-deep-maroon)] transition-colors duration-500 group-hover:bg-[var(--color-saffron)]" />
-      </div>
 
-      {/* Image area with rounded inner mask */}
-      <div className="relative m-3 mt-4 aspect-square overflow-hidden rounded-xl">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          className="object-cover transition-all duration-700 group-hover:scale-110"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
+        {/* Content area */}
+        <div className="relative flex flex-1 flex-col px-5 pb-5 -mt-1">
+          {/* Product name - clickable */}
+          <Link href={`/products/${product.id}`} className="hover:underline decoration-primary underline-offset-2">
+            <h3 className="text-center font-serif text-lg font-bold text-foreground leading-snug tracking-wide">
+              {product.name}
+            </h3>
+          </Link>
 
-        {/* Overlay */}
-        <div
-          className="absolute inset-0 bg-[var(--color-dark-brown)]/0 transition-all duration-500 group-hover:bg-[var(--color-dark-brown)]/30"
-          aria-hidden="true"
-        />
-
-        {/* Category badge with lotus */}
-        <div className="absolute left-2.5 top-2.5 flex items-center gap-1 rounded-full bg-[var(--color-dark-brown)]/80 px-3 py-1 backdrop-blur-sm">
-          <LotusIcon className="h-3 w-3 text-[var(--color-saffron)]" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-sandal)]">
-            {categoryLabels[product.category] || product.category}
-          </span>
-        </div>
-
-        {/* Quick-shop floating button */}
-        <div className="absolute bottom-3 right-3 translate-y-4 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform duration-300 hover:scale-110">
-            <ShoppingBag className="h-4 w-4" />
-          </span>
-        </div>
-
-        {/* Price tag on image */}
-        <div className="absolute bottom-3 left-3 translate-y-4 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">
-          <span className="rounded-lg bg-card/90 px-3 py-1.5 text-lg font-bold text-secondary shadow-lg backdrop-blur-sm">
-            {"₹"}{product.price.toLocaleString("en-IN")}
-          </span>
-        </div>
-      </div>
-
-      {/* Lotus divider between image and content */}
-      <div className="-mt-2 px-3">
-        <LotusDivider />
-      </div>
-
-      {/* Content area */}
-      <div className="relative flex flex-1 flex-col px-5 pb-5 -mt-1">
-        {/* Product name */}
-        <h3 className="text-center font-serif text-lg font-bold text-foreground leading-snug tracking-wide">
-          {product.name}
-        </h3>
-
-        {/* Description */}
-        <p className="mt-1.5 line-clamp-2 text-center text-[13px] leading-relaxed text-muted-foreground">
-          {product.description}
-        </p>
-
-        <div className="flex-1" />
-
-        {/* Bottom CTA row */}
-        <div className="mt-4 flex items-center justify-between" onClick={handleSparkle}>
-          <p className="text-xl font-bold text-secondary">
-            {"₹"}{product.price.toLocaleString("en-IN")}
+          {/* Description */}
+          <p className="mt-1.5 line-clamp-2 text-center text-[13px] leading-relaxed text-muted-foreground">
+            {product.description}
           </p>
-          <span className="group/btn flex items-center gap-1.5 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground cursor-pointer">
-            <span>View Details</span>
-            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-          </span>
+
+          <div className="flex-1" />
+
+          {/* Bottom CTA row */}
+          <div className="mt-4 flex items-center justify-between">
+            <p className="text-xl font-bold text-secondary">
+              {"₹"}{product.price.toLocaleString("en-IN")}
+            </p>
+            <div
+              onClick={handleViewDetails}
+              className="group/btn flex items-center gap-1.5 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground cursor-pointer"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleViewDetails(e as any)
+                }
+              }}
+            >
+              <span>View Details</span>
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+            </div>
+          </div>
+        </div>
+
+        {/* Corner lotus petals - decorative */}
+        <div className="pointer-events-none absolute -bottom-2 -right-2 opacity-0 transition-all duration-700 group-hover:opacity-100" aria-hidden="true">
+          <svg viewBox="0 0 60 60" fill="none" className="h-16 w-16">
+            <path d="M60 60 Q40 50 50 30 Q55 45 60 60Z" fill="var(--color-saffron)" opacity="0.12" />
+            <path d="M60 60 Q35 55 40 35 Q50 50 60 60Z" fill="var(--color-deep-maroon)" opacity="0.08" />
+          </svg>
+        </div>
+        <div className="pointer-events-none absolute -left-2 -top-2 opacity-0 transition-all duration-700 group-hover:opacity-100" aria-hidden="true">
+          <svg viewBox="0 0 60 60" fill="none" className="h-16 w-16">
+            <path d="M0 0 Q20 10 10 30 Q5 15 0 0Z" fill="var(--color-saffron)" opacity="0.12" />
+            <path d="M0 0 Q25 5 20 25 Q10 10 0 0Z" fill="var(--color-deep-maroon)" opacity="0.08" />
+          </svg>
         </div>
       </div>
-
-      {/* Corner lotus petals - decorative */}
-      <div className="pointer-events-none absolute -bottom-2 -right-2 opacity-0 transition-all duration-700 group-hover:opacity-100" aria-hidden="true">
-        <svg viewBox="0 0 60 60" fill="none" className="h-16 w-16">
-          <path d="M60 60 Q40 50 50 30 Q55 45 60 60Z" fill="var(--color-saffron)" opacity="0.12" />
-          <path d="M60 60 Q35 55 40 35 Q50 50 60 60Z" fill="var(--color-deep-maroon)" opacity="0.08" />
-        </svg>
-      </div>
-      <div className="pointer-events-none absolute -left-2 -top-2 opacity-0 transition-all duration-700 group-hover:opacity-100" aria-hidden="true">
-        <svg viewBox="0 0 60 60" fill="none" className="h-16 w-16">
-          <path d="M0 0 Q20 10 10 30 Q5 15 0 0Z" fill="var(--color-saffron)" opacity="0.12" />
-          <path d="M0 0 Q25 5 20 25 Q10 10 0 0Z" fill="var(--color-deep-maroon)" opacity="0.08" />
-        </svg>
-      </div>
-      </Link>
     </>
   )
 }
